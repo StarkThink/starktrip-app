@@ -676,15 +676,37 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": null,
-      "class_hash": "0x1e7ddcd0bb02ce6423456215b71730c3524502d4067674f50233651d57559c0",
-      "original_class_hash": "0x1e7ddcd0bb02ce6423456215b71730c3524502d4067674f50233651d57559c0",
-      "base_class_hash": "0x0",
+      "address": "0x7d64230848cc3da3acd52e56057bda02261dbc7114f7da56aa1368b57cb4888",
+      "class_hash": "0x64ec799bcee2a036b13d19307ae2b46ce1d5c87817532d821488fb986b277e7",
+      "original_class_hash": "0x64ec799bcee2a036b13d19307ae2b46ce1d5c87817532d821488fb986b277e7",
+      "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
           "type": "impl",
-          "name": "Game",
-          "interface_name": "starktrip::systems::game::IGame"
+          "name": "DojoResourceProviderImpl",
+          "interface_name": "dojo::world::IDojoResourceProvider"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::world::IDojoResourceProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_resource",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::world::IWorldProvider"
         },
         {
           "type": "struct",
@@ -698,65 +720,204 @@
         },
         {
           "type": "interface",
-          "name": "starktrip::systems::game::IGame",
+          "name": "dojo::world::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "GameImpl",
+          "interface_name": "starktrip::systems::game_system::IGameSystem"
+        },
+        {
+          "type": "interface",
+          "name": "starktrip::systems::game_system::IGameSystem",
           "items": [
             {
               "type": "function",
               "name": "create_game",
               "inputs": [
                 {
-                  "name": "world",
-                  "type": "dojo::world::IWorldDispatcher"
-                },
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
+                  "name": "player_name",
+                  "type": "core::felt252"
                 }
               ],
               "outputs": [
                 {
-                  "type": "core::integer::u32"
+                  "type": "core::felt252"
                 }
               ],
-              "state_mutability": "external"
+              "state_mutability": "view"
             },
             {
               "type": "function",
               "name": "move",
               "inputs": [
                 {
-                  "name": "world",
-                  "type": "dojo::world::IWorldDispatcher"
-                },
-                {
-                  "name": "pos_x",
+                  "name": "node_id",
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "pos_y",
+                  "name": "id",
                   "type": "core::integer::u32"
                 }
               ],
-              "outputs": [
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradableImpl",
+          "interface_name": "dojo::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
                 {
-                  "type": "core::integer::u32"
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
                 }
               ],
+              "outputs": [],
               "state_mutability": "external"
             }
           ]
         },
         {
           "type": "event",
-          "name": "starktrip::systems::game::game::Event",
+          "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::components::upgradeable::upgradeable::Event",
           "kind": "enum",
-          "variants": []
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "starktrip::events::GameOver",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_address",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "starktrip::events::GameWin",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_address",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "round",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "score",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "starktrip::events::CreateGame",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_address",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "starktrip::systems::game_system::game_system::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::components::upgradeable::upgradeable::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "GameOver",
+              "type": "starktrip::events::GameOver",
+              "kind": "nested"
+            },
+            {
+              "name": "GameWin",
+              "type": "starktrip::events::GameWin",
+              "kind": "nested"
+            },
+            {
+              "name": "CreateGame",
+              "type": "starktrip::events::CreateGame",
+              "kind": "nested"
+            }
+          ]
         }
       ],
       "reads": [],
       "writes": [],
       "computed": [],
-      "name": "starktrip::systems::game::game"
+      "name": "starktrip::systems::game_system::game_system"
     }
   ],
   "models": [
@@ -780,12 +941,17 @@
         },
         {
           "name": "max_movements",
+          "type": "u16",
+          "key": false
+        },
+        {
+          "name": "animals_to_deliver",
           "type": "u8",
           "key": false
         }
       ],
-      "class_hash": "0x286193d716ff0d1daca38d39a89374a19e4fad48bc5056b785088a47ba2e265",
-      "original_class_hash": "0x286193d716ff0d1daca38d39a89374a19e4fad48bc5056b785088a47ba2e265",
+      "class_hash": "0xba813059a5c4efa70dd718176dbaa5b18142f6914a2e061fe63833f8b913b9",
+      "original_class_hash": "0xba813059a5c4efa70dd718176dbaa5b18142f6914a2e061fe63833f8b913b9",
       "abi": [
         {
           "type": "impl",
@@ -978,6 +1144,10 @@
             },
             {
               "name": "max_movements",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "animals_to_deliver",
               "type": "core::integer::u8"
             }
           ]
@@ -1799,7 +1969,7 @@
         },
         {
           "name": "node_id",
-          "type": "felt252",
+          "type": "u32",
           "key": false
         },
         {
@@ -1813,8 +1983,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x17920d146846f548c1b94cab55e3196f954ac637211befa4e142122146bda57",
-      "original_class_hash": "0x17920d146846f548c1b94cab55e3196f954ac637211befa4e142122146bda57",
+      "class_hash": "0x3200ff95253405b087f33d14cb4ea451864b56d145c1343af5c2e4c14e3437",
+      "original_class_hash": "0x3200ff95253405b087f33d14cb4ea451864b56d145c1343af5c2e4c14e3437",
       "abi": [
         {
           "type": "impl",
@@ -2003,7 +2173,7 @@
             },
             {
               "name": "node_id",
-              "type": "core::felt252"
+              "type": "core::integer::u32"
             },
             {
               "name": "movements",

@@ -38,8 +38,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: url('./background.png') repeat center center; /* Change the path to your image */
-
+    background: url('./background.png') repeat center center;
   }
   
   .background-image {
