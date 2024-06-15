@@ -29,13 +29,13 @@ const Game: React.FC<GameProps> = ({ account, entityId }) => {
   const [showModal, setShowModal] = useState(false);
 
   const matrix: string[][] = [
-    ['o', 'o', 'o', 'o', 'o'],
+    ['alien2', 'o', 'alien_p', 'o', 'ghost_p'],
     ['o', 'x', 'o', 'x', 'x'],
-    ['o', 'o', 'o', 'o', 'o'],
+    ['dino_p', 'o', 'player', 'o', 'o'],
     ['x', 'x', 'x', 'x', 'o'],
-    ['o', 'o', 'o', 'o', 'o'],
-    ['o', 'x', 'o', 'x', 'o'],
-    ['o', 'o', 'o', 'o', 'o'],
+    ['dino', 'o', 'o', 'o', 'o'],
+    ['o', 'x', 'o', 'x', 'ghost'],
+    ['o', 'o', 'alien', 'o', 'alien2_p'],
   ];
 
   const handleModalToggle = () => {
@@ -54,7 +54,7 @@ const Game: React.FC<GameProps> = ({ account, entityId }) => {
             </div>
         </div>
         <div className="board-content">
-          <Board matrix={matrix} />
+          <Board matrix={matrix} path={[[0,0]]}/>
         </div>
         <div className="buttons-container">
           <div className="button-container">
