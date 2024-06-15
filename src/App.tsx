@@ -1,17 +1,15 @@
-import { useComponentValue } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Direction } from "./utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
-import background from './background.png';
 import Game  from "./react_components/game";
+import gifImage from './assets/starktrip.gif'; // Adjust the path as necessary
 
 const App: React.FC = () => {
     const {
         setup: {
-            systemCalls: { spawn, move },
+            systemCalls: { spawn },
             clientComponents: { Position, Moves },
         },
         account,
@@ -61,32 +59,42 @@ const App: React.FC = () => {
 
     return (
         <div className="image-container">
-            <img src={background} alt="Background" className="background-image" />
-            <div className="overlay"></div>
-            <div className="title">Astro Glide</div>
             <div className="account-container">
-                <div className="account-title">Current account</div>
-                <div className="account-display">{account.account.address}</div>
-                <div className="account-buttons">
-                    <button onClick={() => account?.create()}>
-                        {account?.isDeploying ? "Deploying Burner" : "Create Burner"}
-                    </button>
-                    {account && account?.list().length > 0 && (
-                        <button onClick={async () => await account?.copyToClipboard()}>
-                            Save Burners to Clipboard
+                <div className="logo-img">
+                    <img src={gifImage} alt="Loading animation" />
+                </div>
+                <div>
+                    <div className="account-player">
+                        <label htmlFor="playerName">Player Name</label>
+                        <input type="text" id="playerName" name="playerName" />
+                    </div>
+                    <div className="account-address">
+                        <label htmlFor="playerName">Account</label>
+                        <div className="account-display">{account.account.address}</div>
+                    </div>
+                    <div className="account-buttons">
+                        <button onClick={() => account?.create()}>
+                            {account?.isDeploying ? "Deploying Burner" : "Create Burner"}
                         </button>
-                    )}
-                    <button onClick={handleRestoreBurners}>
-                        Restore Burners from Clipboard
-                    </button>
-                    {clipboardStatus.message && (
-                        <div className={clipboardStatus.isError ? "error" : "success"}>
-                            {clipboardStatus.message}
-                        </div>
-                    )}
+                        {account && account?.list().length > 0 && (
+                            <button onClick={async () => await account?.copyToClipboard()}>
+                                Save Burners to Clipboard
+                            </button>
+                        )}
+                        <button onClick={handleRestoreBurners}>
+                            Restore Burners from Clipboard
+                        </button>
+                        {clipboardStatus.message && (
+                            <div className={clipboardStatus.isError ? "error" : "success"}>
+                                {clipboardStatus.message}
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <div className="centered-button">
+                    <button onClick={handlePlayClick} className="pixel-art-button">Start</button>
                 </div>
             </div>
-            <button onClick={handlePlayClick} className="centered-button pixel-art-button">Start</button>
         </div>
     );
     /*

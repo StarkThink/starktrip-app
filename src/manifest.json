@@ -1020,12 +1020,12 @@
         {
           "name": "spaceship_id",
           "type": "u32",
-          "key": true
+          "key": false
         },
         {
           "name": "board_id",
           "type": "u32",
-          "key": true
+          "key": false
         },
         {
           "name": "score",
@@ -1053,8 +1053,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x2671aaa6f4eb41826c37c98962306dc8899606e00087f50f9f07895b9370935",
-      "original_class_hash": "0x2671aaa6f4eb41826c37c98962306dc8899606e00087f50f9f07895b9370935",
+      "class_hash": "0x76a2693e30dc32e616d15a532a893b059d52af257082582d7ff79a8e78141e5",
+      "original_class_hash": "0x76a2693e30dc32e616d15a532a893b059d52af257082582d7ff79a8e78141e5",
       "abi": [
         {
           "type": "impl",
@@ -1795,21 +1795,26 @@
         {
           "name": "game_id",
           "type": "u32",
-          "key": true
-        },
-        {
-          "name": "pos_x",
-          "type": "u32",
           "key": false
         },
         {
-          "name": "pos_y",
-          "type": "u32",
+          "name": "node_id",
+          "type": "felt252",
+          "key": false
+        },
+        {
+          "name": "movements",
+          "type": "u16",
+          "key": false
+        },
+        {
+          "name": "delivered_animals",
+          "type": "u8",
           "key": false
         }
       ],
-      "class_hash": "0x57a844dab279e690f4ae36fbeb1b6a4fc222bf569793aa78dcd02ac6f237af9",
-      "original_class_hash": "0x57a844dab279e690f4ae36fbeb1b6a4fc222bf569793aa78dcd02ac6f237af9",
+      "class_hash": "0x17920d146846f548c1b94cab55e3196f954ac637211befa4e142122146bda57",
+      "original_class_hash": "0x17920d146846f548c1b94cab55e3196f954ac637211befa4e142122146bda57",
       "abi": [
         {
           "type": "impl",
@@ -1997,12 +2002,16 @@
               "type": "core::integer::u32"
             },
             {
-              "name": "pos_x",
-              "type": "core::integer::u32"
+              "name": "node_id",
+              "type": "core::felt252"
             },
             {
-              "name": "pos_y",
-              "type": "core::integer::u32"
+              "name": "movements",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "delivered_animals",
+              "type": "core::integer::u8"
             }
           ]
         },

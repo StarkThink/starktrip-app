@@ -38,6 +38,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: url('./background.png') repeat center center; /* Change the path to your image */
+
   }
   
   .background-image {
@@ -79,6 +81,7 @@ body {
 
   .account-display {
     font-family: 'Courier New', monospace;
+    font-weight: bold;
     font-size: 1rem;
     z-index: 10; /* Ensure title is above image and overlay */
     color: #fff; /* White color for visibility */
@@ -100,7 +103,9 @@ body {
   
   .centered-button {
     z-index: 10; /* Ensures the button is above the image and overlay */
-    margin-top: 20px; /* Extra spacing if needed */
+    margin-top: 40px; /* Extra spacing if needed */
+    align-items: center;
+    text-align: center;
   }
   
   .space-background {
@@ -176,3 +181,55 @@ body {
     top: 50%;
     width: 100%;
   }
+
+.account-player {
+  font-family: 'Courier New', monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.account-player label {
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.account-player input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    text-align: center; /* Center the text horizontally */
+    line-height: 1.5em; /* Center the text vertically if necessary */
+}
+
+.account-player input[type="text"]:focus {
+    border-color: #66afe9;
+    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: none;
+}
+
+.account-player input[type="text"]::placeholder {
+    color: #999;
+}
+
+.account-address {
+  font-family: 'Courier New', monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.account-address label {
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.logo-img {
+  margin-bottom: 50px;
+}
