@@ -32,7 +32,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh; /* Full height of the viewport */
+    height: 900px;
 }
 
 .board {
@@ -164,4 +164,80 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background-color: #1d1d18;
+  }
+
+  .spaceship-up {
+    transform: rotate(0deg);
+  }
+  
+  .spaceship-right {
+    transform: rotate(90deg);
+  }
+  
+  .spaceship-down {
+    transform: rotate(180deg);
+  }
+  
+  .spaceship-left {
+    transform: rotate(-90deg);
+  }
+
+  .collected-characters {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  
+  .collected-gif {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+  }
+
+  .collected-characters{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    min-height: 40px;
+    font-size: 1rem;
+  }
+
+  .leaderboard-wrapper {
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0);
+    padding: 20px;
+  }
+
+  .leaderboard-scores{
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 2rem;
+    color: yellow;
+  }
+
+  .button-play-again-content{
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+  }
+
+  .button-play-again{
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-left: 20%;
+    width: 60%;
+    border: none;
+    background-color: rgb(51, 179, 72);
+    color: #fff;
+    outline: 3px solid rgb(202, 215, 18);
+    cursor: pointer;
+    border-radius: 5px;
+    image-rendering: pixelated; /* Ensures the font stays pixelated */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25); /* Adds a shadow */
   }
