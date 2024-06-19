@@ -1,2 +1,2 @@
-export const GAME_ID_EVENT = "0xf7ed1ec3a2efb4c4ff4451b344e4a3c4f8bbd6a437e31765a32df3c3a44cdd";
+export const GAME_ID_EVENT = "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d";
 export const MOVE_EVENT = "0xf7ed1ec3a2efb4c4ff4451b344e4a3c4f8bbd6a437e31765a32df3c3a44cdd";

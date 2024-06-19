@@ -29,9 +29,10 @@ export function createSystemCalls(
 
             if (tx.isSuccess()) {
               const events = tx.events;
-              setComponentsFromEvents(contractComponents, getEvents(tx));
-              const value = getNumberValueFromEvents(events, GAME_ID_EVENT, 0);
-              console.log("Game " + value + " created");
+              let events_found = getEvents(tx);
+              console.log("events_found", events_found);
+              setComponentsFromEvents(contractComponents, events_found);
+              const value = getNumberValueFromEvents(events, GAME_ID_EVENT, 1);
               return value;
             } else {
               console.error("Error creating game:", tx);
