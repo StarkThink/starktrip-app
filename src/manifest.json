@@ -677,8 +677,8 @@
     {
       "kind": "DojoContract",
       "address": "0x7d64230848cc3da3acd52e56057bda02261dbc7114f7da56aa1368b57cb4888",
-      "class_hash": "0x67b4065b103324119734e5a3b0c5484b89101f7cbfd0407b6e527457445b947",
-      "original_class_hash": "0x67b4065b103324119734e5a3b0c5484b89101f7cbfd0407b6e527457445b947",
+      "class_hash": "0x374153d3b7e030a437b6c2d16672e3ef9e2d6af209a9864fcb7fa9c0f3f15ff",
+      "original_class_hash": "0x374153d3b7e030a437b6c2d16672e3ef9e2d6af209a9864fcb7fa9c0f3f15ff",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -2097,17 +2097,17 @@
         },
         {
           "name": "round",
-          "type": "u32",
+          "type": "u8",
           "key": false
         },
         {
           "name": "score",
-          "type": "u32",
+          "type": "u8",
           "key": false
         }
       ],
-      "class_hash": "0x2111fb98844587e0fe1918d6ffede47ad484062fb43443b50111a4dc4972cce",
-      "original_class_hash": "0x2111fb98844587e0fe1918d6ffede47ad484062fb43443b50111a4dc4972cce",
+      "class_hash": "0x5559bbe91044a5fe5e71a71099b444e96dd40f168947bcab14a090d39ff5252",
+      "original_class_hash": "0x5559bbe91044a5fe5e71a71099b444e96dd40f168947bcab14a090d39ff5252",
       "abi": [
         {
           "type": "impl",
@@ -2296,11 +2296,11 @@
             },
             {
               "name": "round",
-              "type": "core::integer::u32"
+              "type": "core::integer::u8"
             },
             {
               "name": "score",
-              "type": "core::integer::u32"
+              "type": "core::integer::u8"
             }
           ]
         },
@@ -2589,13 +2589,8 @@
           "key": true
         },
         {
-          "name": "score",
-          "type": "u32",
-          "key": false
-        },
-        {
-          "name": "round",
-          "type": "u32",
+          "name": "owner",
+          "type": "ContractAddress",
           "key": false
         },
         {
@@ -2604,18 +2599,18 @@
           "key": false
         },
         {
-          "name": "owner",
-          "type": "ContractAddress",
+          "name": "score",
+          "type": "u8",
           "key": false
         },
         {
-          "name": "state",
-          "type": "bool",
+          "name": "round",
+          "type": "u8",
           "key": false
         }
       ],
-      "class_hash": "0x78c3e98128fccdfab792555054a0fa6ef912fdd25671ace7ae7781148b90f8a",
-      "original_class_hash": "0x78c3e98128fccdfab792555054a0fa6ef912fdd25671ace7ae7781148b90f8a",
+      "class_hash": "0xd10ab107b99cb0f24cfac8f20c29de7e69d1cadc13ed7674cdc9786c18b7b4",
+      "original_class_hash": "0xd10ab107b99cb0f24cfac8f20c29de7e69d1cadc13ed7674cdc9786c18b7b4",
       "abi": [
         {
           "type": "impl",
@@ -2791,20 +2786,6 @@
           "interface_name": "starktrip::models::game::Igame"
         },
         {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
-        },
-        {
           "type": "struct",
           "name": "starktrip::models::game::Game",
           "members": [
@@ -2813,24 +2794,20 @@
               "type": "core::integer::u32"
             },
             {
-              "name": "score",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "round",
-              "type": "core::integer::u32"
+              "name": "owner",
+              "type": "core::starknet::contract_address::ContractAddress"
             },
             {
               "name": "player_name",
               "type": "core::felt252"
             },
             {
-              "name": "owner",
-              "type": "core::starknet::contract_address::ContractAddress"
+              "name": "score",
+              "type": "core::integer::u8"
             },
             {
-              "name": "state",
-              "type": "core::bool"
+              "name": "round",
+              "type": "core::integer::u8"
             }
           ]
         },

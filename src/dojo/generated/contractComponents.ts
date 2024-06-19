@@ -48,11 +48,11 @@ export function defineContractComponents(world: World) {
     GameEvent: (() => {
       return defineComponent(
         world,
-        { id: RecsType.Number, spaceship_id: RecsType.Number, board_id: RecsType.Number, score: RecsType.Number, round: RecsType.Number, player_name: RecsType.BigInt, owner: RecsType.BigInt, state: RecsType.Boolean },
+        { id: RecsType.Number, score: RecsType.Number, round: RecsType.Number, player_name: RecsType.BigInt, owner: RecsType.BigInt, state: RecsType.Boolean },
         {
           metadata: {
             name: "GameEvent",
-            types: ["u32","u32","u32","u32","u32","felt252","contractaddress","bool"],
+            types: ["u32","u32","u32","felt252","contractaddress","bool"],
             customTypes: [],
           },
         }
@@ -78,7 +78,20 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: "GameWin",
-            types: ["u32","contractaddress","u32","u32"],
+            types: ["u32","contractaddress","u8","u8"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    Move: (() => {
+      return defineComponent(
+        world,
+        { game_id: RecsType.Number, pos_x: RecsType.Number, pos_y: RecsType.Number, remaining_gas: RecsType.Number },
+        {
+          metadata: {
+            name: "Move",
+            types: ["u32","u8","u8","u8"],
             customTypes: [],
           },
         }
@@ -87,11 +100,11 @@ export function defineContractComponents(world: World) {
     Game: (() => {
       return defineComponent(
         world,
-        { id: RecsType.Number, score: RecsType.Number, round: RecsType.Number, player_name: RecsType.BigInt, owner: RecsType.BigInt, state: RecsType.Boolean },
+        { id: RecsType.Number, owner: RecsType.BigInt, player_name: RecsType.BigInt, score: RecsType.Number, round: RecsType.Number },
         {
           metadata: {
             name: "Game",
-            types: ["u32","u32","u32","felt252","contractaddress","bool"],
+            types: ["u32","contractaddress","felt252","u8","u8"],
             customTypes: [],
           },
         }
