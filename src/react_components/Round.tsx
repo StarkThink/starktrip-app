@@ -12,10 +12,11 @@ import './components.css';
 
 interface RoundProps {
   account: BurnerAccount;
+  gameId: number;
   entityId: Entity;
 }
 
-const Round: React.FC<RoundProps> = ({ account, entityId }) => {
+const Round: React.FC<RoundProps> = ({ account, gameId, entityId }) => {
   const [showGif, setShowGif] = useState(true);
   
   const {
@@ -47,7 +48,7 @@ const Round: React.FC<RoundProps> = ({ account, entityId }) => {
       )}
       {!showGif && (
         <div>
-            <Game account={account} entityId={entityId} />
+            <Game account={account} entityId={entityId} gameId={gameId} />
         </div>
       )}
     </div>

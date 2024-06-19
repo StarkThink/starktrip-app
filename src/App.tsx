@@ -5,6 +5,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
 import Round  from "./react_components/Round";
 import gifImage from './assets/starktrip.gif';
+import { GAME_ID } from "./constants/localStorage";
 
 const App: React.FC = () => {
     const {
@@ -15,14 +16,35 @@ const App: React.FC = () => {
         account,
     } = useDojo();
     const [startGame, setStartGame] = useState(false);
+    const [gameId, setGameId] = useState<number>(
+        Number(localStorage.getItem(GAME_ID)) ?? 0
+      );
+    const [error, setError] = useState(false);
 
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
         isError: false,
     });
 
+    const executeCreateGame = (username: string) => {
+        console.log("Creating game...");
+        createGame(account.account, username).then((newGameId) => {
+          if (newGameId) {
+            setGameId(newGameId);
+            localStorage.setItem(GAME_ID, newGameId.toString());
+            console.log(`game ${newGameId} created`);
+          } else {
+            setError(true);
+          }
+        });
+    };
+
     const handlePlayClick = () => {
-        createGame(account.account, "");
+        let username = (document.getElementById("playerName") as HTMLInputElement)?.value ?? "Unknown Player";
+        executeCreateGame(username);
+        if (error) {
+            console.log("Error creating game");
+        }
         setStartGame(true);
     };
 
@@ -40,7 +62,7 @@ const App: React.FC = () => {
         const entityId = getEntityIdFromKeys([
             BigInt(account?.account.address),
         ]) as Entity;
-        return <Round account={account} entityId={entityId} />;
+        return <Round account={account} gameId={gameId} entityId={entityId} />;
     }
 
     return (

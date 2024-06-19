@@ -23,11 +23,10 @@ export function createSystemCalls(
               account,
               username,
             });
-      
             const tx = await account.waitForTransaction(transaction_hash, {
               retryInterval: 100,
             });
-      
+
             if (tx.isSuccess()) {
               const events = tx.events;
               setComponentsFromEvents(contractComponents, getEvents(tx));

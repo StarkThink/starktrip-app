@@ -7,23 +7,25 @@ import Leaderboard from './leaderboard';
 import Modal from './modal';
 import "../App.css";
 import { BurnerAccount } from '@dojoengine/create-burner';
+import { getGame } from '../dojo/utils/getGame';
+import { get } from 'http';
 
 interface GameProps {
   account: BurnerAccount;
   entityId: Entity;
+  gameId: number;
 }
 
-const Game: React.FC<GameProps> = ({ account, entityId }) => {
+const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
   const {
       setup: {
           systemCalls: { move },
-          clientComponents: { Board, CharactersInside },
+          clientComponents: { Board, CharactersInside, Game },
       },
   } = useDojo();
 
   // get current component values
-  const position_block = useComponentValue(Board, entityId);
-  const moves = useComponentValue(CharactersInside, entityId);
+  const game = getGame(gameId, Game) ?? { player_name: 'Unknown Player', round: 1, score: 0 };
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
@@ -53,9 +55,9 @@ const Game: React.FC<GameProps> = ({ account, entityId }) => {
       ) : (
         <div className="game-content">
           <div>
-            <div>Player: test</div>
-            <div>Round: 1</div>
-            <div>Score: 0</div>
+            <div>Player: {game.player_name}</div>
+            <div>Round: {game.round}</div>
+            <div>Score: {game.score}</div>
             <div className="how-to-play" onClick={handleModalToggle}>
               How to play?
             </div>
