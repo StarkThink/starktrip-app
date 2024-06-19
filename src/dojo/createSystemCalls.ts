@@ -1,10 +1,9 @@
 import { AccountInterface } from "starknet";
-import { Entity, getComponentValue } from "@dojoengine/recs";
-import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
-import { Direction, updatePositionWithDirection } from "../utils";
+import { getNumberValueFromEvents } from "../utils/getNumberValueFromEvent";
+import { GAME_ID_EVENT } from "../constants/dojoEventKeys";
+import { getMoveEvent } from "../utils/getMoveEvents";
 import {
-    getEntityIdFromKeys,
     getEvents,
     setComponentsFromEvents,
 } from "@dojoengine/utils";
@@ -16,65 +15,40 @@ export type SystemCalls = ReturnType<typeof createSystemCalls>;
 export function createSystemCalls(
     { client }: { client: IWorld },
     contractComponents: ContractComponents,
-    { Position, Moves }: ClientComponents
+    { Board, CharactersInside }: ClientComponents
 ) {
-    const spawn = async (account: AccountInterface) => {
-        const entityId = getEntityIdFromKeys([
-            BigInt(account.address),
-        ]) as Entity;
-
-        const positionId = uuid();
-        Position.addOverride(positionId, {
-            entity: entityId,
-            value: { player: BigInt(entityId), vec: { x: 10, y: 10 } },
-        });
-
-        const movesId = uuid();
-        Moves.addOverride(movesId, {
-            entity: entityId,
-            value: {
-                player: BigInt(entityId),
-                remaining: 100,
-                last_direction: 0,
-            },
-        });
-
+    const createGame = async (account: AccountInterface, username: string) => {
         try {
-            const { transaction_hash } = await client.actions.spawn({
-                account,
+            const { transaction_hash } = await client.actions.createGame({
+              account,
+              username,
             });
-
-            console.log(
-                await account.waitForTransaction(transaction_hash, {
-                    retryInterval: 100,
-                })
-            );
-
-            setComponentsFromEvents(
-                contractComponents,
-                getEvents(
-                    await account.waitForTransaction(transaction_hash, {
-                        retryInterval: 100,
-                    })
-                )
-            );
-        } catch (e) {
+      
+            const tx = await account.waitForTransaction(transaction_hash, {
+              retryInterval: 100,
+            });
+      
+            if (tx.isSuccess()) {
+              const events = tx.events;
+              setComponentsFromEvents(contractComponents, getEvents(tx));
+              const value = getNumberValueFromEvents(events, GAME_ID_EVENT, 0);
+              console.log("Game " + value + " created");
+              return value;
+            } else {
+              console.error("Error creating game:", tx);
+              return false;
+            }
+          } catch (e) {
             console.log(e);
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
-        } finally {
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
-        }
-    };
+            return false;
+          }
+        };
 
-    const move = async (account: AccountInterface, direction: Direction) => {
-        const entityId = getEntityIdFromKeys([
-            BigInt(account.address),
-        ]) as Entity;
-
-        const positionId = uuid();
-        Position.addOverride(positionId, {
+    const move = async (account: AccountInterface, game_id: number, pos_x: number, pos_y: number) => {
+        //const entityId = getEntityIdFromKeys([
+        //    BigInt(account.address),
+        //]) as Entity;
+        /*Position.addOverride(positionId, {
             entity: entityId,
             value: {
                 player: BigInt(entityId),
@@ -83,44 +57,34 @@ export function createSystemCalls(
                     getComponentValue(Position, entityId) as any
                 ).vec,
             },
-        });
-
-        const movesId = uuid();
-        Moves.addOverride(movesId, {
-            entity: entityId,
-            value: {
-                player: BigInt(entityId),
-                remaining:
-                    (getComponentValue(Moves, entityId)?.remaining || 0) - 1,
-            },
-        });
+        });*/
 
         try {
             const { transaction_hash } = await client.actions.move({
-                account,
-                direction,
+              account,
+              game_id,
+              pos_x,
+              pos_y,
             });
+      
+            const tx = await account.waitForTransaction(transaction_hash, {
+              retryInterval: 100,
+            });
+      
+            setComponentsFromEvents(contractComponents, getEvents(tx));
 
-            setComponentsFromEvents(
-                contractComponents,
-                getEvents(
-                    await account.waitForTransaction(transaction_hash, {
-                        retryInterval: 100,
-                    })
-                )
-            );
+            if (tx.isSuccess()) {
+                const events = tx.events;
+                return getMoveEvent(events);
+            }
+            return undefined;
         } catch (e) {
             console.log(e);
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
-        } finally {
-            Position.removeOverride(positionId);
-            Moves.removeOverride(movesId);
         }
     };
 
     return {
-        spawn,
+        createGame,
         move,
     };
 }

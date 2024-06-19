@@ -21,7 +21,7 @@ const Round: React.FC<RoundProps> = ({ account, entityId }) => {
   const {
       setup: {
           systemCalls: { move },
-          clientComponents: { Position, Moves },
+          clientComponents: { Board, CharactersInside },
       },
   } = useDojo();
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDojo } from "../dojo/useDojo";
 import { Entity } from "@dojoengine/recs";
 import { useComponentValue } from "@dojoengine/react";
-import Board from './board';
+import BoardComponent from './board';
 import Leaderboard from './leaderboard';
 import Modal from './modal';
 import "../App.css";
@@ -17,13 +17,13 @@ const Game: React.FC<GameProps> = ({ account, entityId }) => {
   const {
       setup: {
           systemCalls: { move },
-          clientComponents: { Position, Moves },
+          clientComponents: { Board, CharactersInside },
       },
   } = useDojo();
 
   // get current component values
-  const position_block = useComponentValue(Position, entityId);
-  const moves = useComponentValue(Moves, entityId);
+  const position_block = useComponentValue(Board, entityId);
+  const moves = useComponentValue(CharactersInside, entityId);
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
@@ -37,7 +37,7 @@ const Game: React.FC<GameProps> = ({ account, entityId }) => {
     ['o', 'x', 'o', 'x', 'ghost'],
     ['o', 'o', 'alien', 'o', 'alien2_p'],
   ];
-
+  
   const handleModalToggle = () => {
     setShowModal(!showModal);
   };
@@ -61,7 +61,7 @@ const Game: React.FC<GameProps> = ({ account, entityId }) => {
             </div>
           </div>
           <div className="board-content">
-            <Board matrix={matrix} />
+            <BoardComponent matrix={matrix} />
           </div>
           <div className="buttons-container">
             <div className="button-container">

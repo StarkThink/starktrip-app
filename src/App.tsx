@@ -9,8 +9,8 @@ import gifImage from './assets/starktrip.gif';
 const App: React.FC = () => {
     const {
         setup: {
-            systemCalls: { spawn },
-            clientComponents: { Position, Moves },
+            systemCalls: { createGame },
+            clientComponents: { Board, CharactersInside },
         },
         account,
     } = useDojo();
@@ -20,23 +20,9 @@ const App: React.FC = () => {
         message: "",
         isError: false,
     });
-    const handleRestoreBurners = async () => {
-        try {
-            await account?.applyFromClipboard();
-            setClipboardStatus({
-                message: "Burners restored successfully!",
-                isError: false,
-            });
-        } catch (error) {
-            setClipboardStatus({
-                message: `Failed to restore burners from clipboard`,
-                isError: true,
-            });
-        }
-    };
 
     const handlePlayClick = () => {
-        spawn(account.account);
+        createGame(account.account, "");
         setStartGame(true);
     };
 
