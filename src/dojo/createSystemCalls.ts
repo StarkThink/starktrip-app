@@ -1,7 +1,7 @@
 import { AccountInterface } from "starknet";
 import { ClientComponents } from "./createClientComponents";
 import { getNumberValueFromEvents } from "../utils/getNumberValueFromEvent";
-import { GAME_ID_EVENT } from "../constants/dojoEventKeys";
+import { CREATE_GAME_EVENT } from "../constants/dojoEventKeys";
 import { getMoveEvent } from "../utils/getMoveEvents";
 import {
     getEvents,
@@ -29,11 +29,13 @@ export function createSystemCalls(
 
             if (tx.isSuccess()) {
               const events = tx.events;
+              console.log("events", events);
               let events_found = getEvents(tx);
-              console.log("events_found", events_found);
+              // This will update the contract models in the UI with the values that were set in the contract
               setComponentsFromEvents(contractComponents, events_found);
-              const value = getNumberValueFromEvents(events, GAME_ID_EVENT, 1);
-              return value;
+              // get game_id from CREATE_GAME_EVENT keys
+              const game_id = getNumberValueFromEvents(events, CREATE_GAME_EVENT, false, 1);
+              return game_id;
             } else {
               console.error("Error creating game:", tx);
               return false;

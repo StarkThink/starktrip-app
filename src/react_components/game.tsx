@@ -8,7 +8,8 @@ import Modal from './modal';
 import "../App.css";
 import { BurnerAccount } from '@dojoengine/create-burner';
 import { getGame } from '../dojo/utils/getGame';
-import { get } from 'http';
+import { decodeString } from '../dojo/utils/decodeString';
+import { getMap } from '../dojo/utils/getMap';
 
 interface GameProps {
   account: BurnerAccount;
@@ -20,25 +21,17 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
   const {
       setup: {
           systemCalls: { move },
-          clientComponents: { Board, CharactersInside, Game },
+          clientComponents: { Board, Tile, Game },
       },
   } = useDojo();
 
   // get current component values
   const game = getGame(gameId, Game) ?? { player_name: 'Unknown Player', round: 1, score: 0 };
+  const matrix = getMap(gameId, Tile, Board);
+  console.log("matrix", matrix);
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
-
-  const matrix: string[][] = [
-    ['alien2', 'o', 'alien_p', 'o', 'ghost_p'],
-    ['o', 'x', 'o', 'x', 'x'],
-    ['dino_p', 'o', 'player', 'o', 'o'],
-    ['x', 'x', 'x', 'x', 'o'],
-    ['dino', 'o', 'o', 'o', 'o'],
-    ['o', 'x', 'o', 'x', 'ghost'],
-    ['o', 'o', 'alien', 'o', 'alien2_p'],
-  ];
   
   const handleModalToggle = () => {
     setShowModal(!showModal);
@@ -55,7 +48,7 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
       ) : (
         <div className="game-content">
           <div>
-            <div>Player: {game.player_name}</div>
+            <div>Player: {decodeString(game.player_name)}</div>
             <div>Round: {game.round}</div>
             <div>Score: {game.score}</div>
             <div className="how-to-play" onClick={handleModalToggle}>

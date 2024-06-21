@@ -16,9 +16,9 @@ interface BoardProps {
 }
 
 const getCellClass = (cell: string): string => {
-  if (cell === 'x') {
+  if (cell === 'wall') {
     return 'wall';
-  } else if (cell !== 'o') {
+  } else if (cell !== 'empty') {
     return 'gif-cell';
   } else {
     return 'path';
@@ -26,7 +26,7 @@ const getCellClass = (cell: string): string => {
 };
 
 const isValidMove = (matrix: string[][], [x, y]: [number, number]): boolean => {
-  return x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length && matrix[x][y] !== 'x';
+  return x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length && matrix[x][y] !== 'wall';
 };
 
 const findPath = (matrix: string[][], start: [number, number], end: [number, number]): [number, number][] | null => {
@@ -90,9 +90,9 @@ const Board: React.FC<BoardProps> = ({ matrix }) => {
             else if (y > prevY) setDirection('right');
 
             const cellContent = matrix[x][y];
-            if (cellContent !== 'o' && cellContent !== 'x' && cellContent !== 'player' && !cellContent.includes('_p')) {
+            if (cellContent !== 'empty' && cellContent !== 'empty' && cellContent !== 'player' && !cellContent.includes('_p')) {
                 setCollectedCharacters(prev => [...prev, cellContent]);
-                matrix[x][y] = 'o'; // Remove character from the matrix
+                matrix[x][y] = 'empty'; // Remove character from the matrix
             }
           
           setPlayerPosition([x, y]);
@@ -128,7 +128,7 @@ const Board: React.FC<BoardProps> = ({ matrix }) => {
                 ) : (
                   <>
                     {cell === 'alien' && <img src={alienCharacter} alt="gif" className="gif-image" />}
-                    {(cell === 'o' || cell === 'player')&& <img src={pathGif} alt="gif" className="gif-image" />}
+                    {(cell === 'empty' || cell === 'player')&& <img src={pathGif} alt="gif" className="gif-image" />}
                     {cell === 'ghost' && <img src={ghostCharacter} alt="gif" className="gif-image" />}
                     {cell === 'dino' && <img src={dinoCharacter} alt="gif" className="gif-image" />}
                     {cell === 'alien2' && <img src={alien2Character} alt="gif" className="gif-image" />}
