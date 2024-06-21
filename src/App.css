@@ -28,6 +28,7 @@ body {
   
   .pixel-art-button:hover {
     background-color: #555;
+    transition: ease-in-out 0.3s;
   }
   
   .image-container {
@@ -39,6 +40,7 @@ body {
     justify-content: center;
     align-items: center;
     background: url('./background.png') repeat center center;
+    filter: brightness(80%);
   }
   
   .background-image {
@@ -186,12 +188,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .account-player label {
   margin-bottom: 10px;
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
 }
 
 .account-player input[type="text"] {
@@ -213,6 +216,21 @@ body {
 
 .account-player input[type="text"]::placeholder {
     color: #999;
+}
+
+.error-container {
+  height: 5px;
+}
+
+.player-name-error {
+    border: 1px solid red;
+    border-radius: 5px;
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 2em;
+    color: #fff;
+    background: rgb(228, 14, 14);
 }
 
 .account-address {

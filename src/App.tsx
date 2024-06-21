@@ -21,6 +21,8 @@ const App: React.FC = () => {
       );
     const [error, setError] = useState(false);
 
+    const [playerName, setPlayerName] = useState('');
+
     const [clipboardStatus, setClipboardStatus] = useState({
         message: "",
         isError: false,
@@ -40,6 +42,10 @@ const App: React.FC = () => {
     };
 
     const handlePlayClick = () => {
+        if (playerName === '') {
+            setClipboardStatus({ message: "Player name is required", isError: true });
+            return;
+        }
         let username = (document.getElementById("playerName") as HTMLInputElement)?.value ?? "Unknown Player";
         executeCreateGame(username);
         if (error) {
@@ -74,9 +80,19 @@ const App: React.FC = () => {
                 <div>
                     <div className="account-player">
                         <label htmlFor="playerName">Player Name</label>
-                        <input type="text" id="playerName" name="playerName" />
+                        <input 
+                            type="text" 
+                            id="playerName" 
+                            name="playerName" 
+                            value={playerName} 
+                            onChange={e => setPlayerName(e.target.value)} 
+                        />
                     </div>
-
+                    <div className="error-container">
+                        {clipboardStatus.isError && (
+                            <div className="player-name-error">{clipboardStatus.message}</div>
+                        )}
+                    </div>
                 </div>
                 <div className="centered-button">
                     <button onClick={handlePlayClick} className="pixel-art-button">Start</button>
