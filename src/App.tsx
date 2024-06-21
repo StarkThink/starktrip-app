@@ -46,8 +46,7 @@ const App: React.FC = () => {
             setClipboardStatus({ message: "Player name is required", isError: true });
             return;
         }
-        let username = (document.getElementById("playerName") as HTMLInputElement)?.value ?? "Unknown Player";
-        executeCreateGame(username);
+        executeCreateGame(playerName);
         if (error) {
             console.log("Error creating game");
         }

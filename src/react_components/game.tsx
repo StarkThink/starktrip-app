@@ -10,6 +10,8 @@ import { BurnerAccount } from '@dojoengine/create-burner';
 import { getGame } from '../dojo/utils/getGame';
 import { decodeString } from '../dojo/utils/decodeString';
 import { getMap } from '../dojo/utils/getMap';
+import { getSpaceship } from '../dojo/utils/getSpaceship';
+import { GAME_ID } from '../constants/localStorage';
 
 interface GameProps {
   account: BurnerAccount;
@@ -21,14 +23,15 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
   const {
       setup: {
           systemCalls: { move },
-          clientComponents: { Board, Tile, Game },
+          clientComponents: { Board, Tile, Game, Spaceship },
       },
   } = useDojo();
 
   // get current component values
   const game = getGame(gameId, Game) ?? { player_name: 'Unknown Player', round: 1, score: 0 };
   const matrix = getMap(gameId, Tile, Board);
-  console.log("matrix", matrix);
+  const spaceship = getSpaceship(gameId, Spaceship) ?? { pos_x: 0, pos_y: 0 };
+  console.log('spaceship', spaceship);
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
@@ -56,7 +59,13 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
             </div>
           </div>
           <div className="board-content">
-            <BoardComponent matrix={matrix} />
+            <BoardComponent
+              matrix={matrix}
+              player_x={spaceship.pos_x}
+              player_y={spaceship.pos_y}
+              account={account}
+              game_id={gameId}
+            />
           </div>
           <div className="buttons-container">
             <div className="button-container">

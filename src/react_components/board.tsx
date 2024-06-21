@@ -10,9 +10,15 @@ import alien2Planet from '../assets/planets/alien2.png';
 import dinoPlanet from '../assets/planets/dino.png';
 import pathGif from '../assets/path.gif';
 import spaceshipGif from '../assets/spaceship.gif';
+import { useDojo } from "../dojo/useDojo";
+import { BurnerAccount } from '@dojoengine/create-burner';
 
 interface BoardProps {
   matrix: string[][];
+  player_x: number;
+  player_y: number;
+  account: BurnerAccount;
+  game_id: number;
 }
 
 const getCellClass = (cell: string): string => {
@@ -69,9 +75,14 @@ const findInitialPlayerPosition = (matrix: string[][]): [number, number] | null 
   return null;
 };
 
-const Board: React.FC<BoardProps> = ({ matrix }) => {
-  const initialPlayerPosition = findInitialPlayerPosition(matrix);
-  const [playerPosition, setPlayerPosition] = useState<[number, number] | null>(initialPlayerPosition);
+const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game_id }) => {
+  const {
+      setup: {
+          systemCalls: { move },
+          clientComponents: { },
+      },
+  } = useDojo();
+  const [playerPosition, setPlayerPosition] = useState<[number, number] | null>([player_x, player_y]);
   const [direction, setDirection] = useState<string>('up');
   const [path, setPath] = useState<[number, number][]>([]);
   const [collectedCharacters, setCollectedCharacters] = useState<string[]>([]);
@@ -94,8 +105,9 @@ const Board: React.FC<BoardProps> = ({ matrix }) => {
                 setCollectedCharacters(prev => [...prev, cellContent]);
                 matrix[x][y] = 'empty'; // Remove character from the matrix
             }
-          
-          setPlayerPosition([x, y]);
+
+          let moveEvent = await move(account.account, game_id, x, y) ?? { pos_x: 0, pos_y: 0 };
+          setPlayerPosition([moveEvent.pos_x, moveEvent.pos_y]);
           await new Promise(resolve => setTimeout(resolve, 300)); // Move delay
         }
       };

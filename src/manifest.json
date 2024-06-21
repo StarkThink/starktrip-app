@@ -677,8 +677,8 @@
     {
       "kind": "DojoContract",
       "address": "0x7d64230848cc3da3acd52e56057bda02261dbc7114f7da56aa1368b57cb4888",
-      "class_hash": "0x724bd5dff84d143ff349cc69b4cd16d6d5d2b0354d4a81e05f33a7aad7f263d",
-      "original_class_hash": "0x724bd5dff84d143ff349cc69b4cd16d6d5d2b0354d4a81e05f33a7aad7f263d",
+      "class_hash": "0x784b10925e73a97e0e5b68ef6b7a5a4b217e35ad7fe33763689ea81e528368f",
+      "original_class_hash": "0x784b10925e73a97e0e5b68ef6b7a5a4b217e35ad7fe33763689ea81e528368f",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -765,8 +765,16 @@
               "name": "move",
               "inputs": [
                 {
-                  "name": "id",
+                  "name": "game_id",
                   "type": "core::integer::u32"
+                },
+                {
+                  "name": "pos_x",
+                  "type": "core::integer::u8"
+                },
+                {
+                  "name": "pos_y",
+                  "type": "core::integer::u8"
                 }
               ],
               "outputs": [],
