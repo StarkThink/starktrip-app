@@ -50,12 +50,22 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
         <Leaderboard />
       ) : (
         <div className="game-content">
-          <div>
-            <div>Player: {decodeString(game.player_name)}</div>
-            <div>Round: {game.round}</div>
-            <div>Score: {game.score}</div>
-            <div className="how-to-play" onClick={handleModalToggle}>
-              How to play?
+          <div className="board-header">
+            <div className='player-info'>
+              <p>Player: {decodeString(game.player_name)}</p>
+              <p>Round: {game.round}</p>
+              <p>Score: {game.score}</p>
+              <p className="how-to-play" onClick={handleModalToggle}>
+                How to play?
+              </p>
+            </div>
+            <div className="buttons-container">
+              <div className="button-container">
+                <button className="next-round-button" disabled={true}>Next Round</button>
+              </div>
+              <div className="button-container">
+                <button className="end-game-button" onClick={handleEndGame}>End Game</button>
+              </div>
             </div>
           </div>
           <div className="board-content">
@@ -66,14 +76,6 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
               account={account}
               game_id={gameId}
             />
-          </div>
-          <div className="buttons-container">
-            <div className="button-container">
-              <button className="next-round-button" disabled={true}>Next Round</button>
-            </div>
-            <div className="button-container">
-              <button className="end-game-button" onClick={handleEndGame}>End Game</button>
-            </div>
           </div>
         </div>
       )}
