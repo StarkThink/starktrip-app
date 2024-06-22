@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './components.css';
 import alienCharacter from '../assets/characters/alien.gif';
 import ghostCharacter from '../assets/characters/ghost.gif';
@@ -87,6 +87,7 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
   const [path, setPath] = useState<[number, number][]>([]);
   const [collectedCharacters, setCollectedCharacters] = useState<string[]>([]);
   const [remainingGas, setRemainingGas] = useState(5);
+  const initialGas = useRef(remainingGas);
 
   useEffect(() => {
     if (path.length > 0) {
@@ -164,7 +165,7 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
       </div>
       <div className="collected-characters-container">
         <div>
-          <p>Remaining Gas: {remainingGas}</p>
+          <p>Gas ⛽ {remainingGas} / {initialGas.current}</p>
         </div>
         <div>
             Collected Characters
