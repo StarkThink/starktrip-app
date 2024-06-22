@@ -51,7 +51,7 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
       ) : (
         <div className="game-content">
           <div className="board-header">
-            <div className='player-info'>
+            <div>
               <p>Player: {decodeString(game.player_name)}</p>
               <p>Round: {game.round}</p>
               <p>Score: {game.score}</p>
