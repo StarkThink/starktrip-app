@@ -86,11 +86,14 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
   const [direction, setDirection] = useState<string>('up');
   const [path, setPath] = useState<[number, number][]>([]);
   const [collectedCharacters, setCollectedCharacters] = useState<string[]>([]);
+  const [remainingGas, setRemainingGas] = useState(5);
 
   useEffect(() => {
     if (path.length > 0) {
+      setRemainingGas(remainingGas - 1);
       const movePlayer = async () => {
         for (let i = 0; i < path.length; i++) {
+            if (remainingGas === 0) break;
             const [x, y] = path[i];
             let index = i - 1;
             if (index < 0) index = 0;
@@ -108,7 +111,7 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
 
           let moveEvent = await move(account.account, game_id, x, y) ?? { pos_x: 0, pos_y: 0 };
           setPlayerPosition([moveEvent.pos_x, moveEvent.pos_y]);
-          await new Promise(resolve => setTimeout(resolve, 300)); // Move delay
+          await new Promise(resolve => setTimeout(resolve, 10)); // Move delay
         }
       };
       movePlayer();
@@ -116,6 +119,9 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
   }, [path]);
 
   const handleCellClick = (rowIndex: number, cellIndex: number) => {
+    if (remainingGas <= 0) {
+      return
+    }
     if (playerPosition) {
       const newPath = findPath(matrix, playerPosition, [rowIndex, cellIndex]);
       if (newPath) {
@@ -156,9 +162,12 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
           </div>
         ))}
       </div>
-      <div className="collected-characters">
+      <div className="collected-characters-container">
         <div>
-            Collected Characters:
+          <p>Remaining Gas: {remainingGas}</p>
+        </div>
+        <div>
+            Collected Characters
         </div>
         <div className="collected-characters">
             {collectedCharacters.map((character, index) => {

@@ -1,7 +1,13 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 .round-title {
     font-family: 'Courier New', monospace;
     font-weight: bold;
-    font-size: 4rem;
+    font-size: 3rem;
     z-index: 10;
     color: #fff;
     text-align: center;
@@ -19,24 +25,55 @@
 }
 
 .game-content {
+	/* border: 1px solid red; */
+	width: 1000px;
+	height: 100vh;
+    display: flex;
+	align-items: center;
+	flex-direction: column;
     font-family: 'Courier New', monospace;
     font-size: 1.5rem;
     font-weight: bold;
     color: yellow;
     padding: 20px;
     min-width: 50%;
-    background: rgba(0, 0, 0, 0.7);
+}
+
+.board-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	width: 900px;
+	margin-top: 50px;
+	/* border: 1px solid purple; */
+}
+
+.board-header div p {
+	font-size: 20px;
 }
 
 .board-content {
+	margin-top: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 900px;
+	/* border: 1px solid red; */
+}
+
+.board-container {
+  display: flex;
+  width: 900px;
+  height: 500px;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 100px;
+  /* border: 1px solid green; */
 }
 
 .board {
     display: block;
+	/* border: 1px solid purple; */
   }
   
   .row {
@@ -44,8 +81,8 @@
   }
   
   .cell {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     box-sizing: border-box;
   }
   
@@ -59,15 +96,15 @@
 
   .buttons-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    margin-top: 20px;
     width: 50%;
+	/* border: 1px solid red; */
   }
 
   .button-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     width: 40%;
   }
@@ -80,13 +117,17 @@
     padding-bottom: 20px;
     width: 90%;
     border: none;
-    background-color: rgb(63, 205, 87);
+    background-color: rgb(55, 163, 73);
     color: #fff;
-    outline: 3px solid rgb(202, 215, 18);
     cursor: pointer;
     border-radius: 5px;
     image-rendering: pixelated; /* Ensures the font stays pixelated */
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25); /* Adds a shadow */
+  }
+
+  .next-round-button:hover {
+	background-color: rgb(10, 96, 24);
+	transition: ease-in-out 0.3s;
   }
 
   .next-round-button:disabled {
@@ -105,11 +146,15 @@
     border: none;
     background-color: rgb(216, 66, 20);
     color: #fff;
-    outline:3px solid rgb(236, 235, 232);
     cursor: pointer;
     border-radius: 5px;
     image-rendering: pixelated; /* Ensures the font stays pixelated */
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25); /* Adds a shadow */
+  }
+
+  .end-game-button:hover {
+	background-color: #555;
+    transition: ease-in-out 0.3s;
   }
 
   .modal-overlay {
@@ -185,8 +230,10 @@
 
   .collected-characters {
     display: flex;
-    flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
     margin-top: 20px;
+	width: 300px;
   }
   
   .collected-gif {
@@ -235,9 +282,13 @@
     border: none;
     background-color: rgb(51, 179, 72);
     color: #fff;
-    outline: 3px solid rgb(202, 215, 18);
     cursor: pointer;
     border-radius: 5px;
     image-rendering: pixelated; /* Ensures the font stays pixelated */
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25); /* Adds a shadow */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  .button-play-again:hover {
+	background-color: rgb(21, 126, 39);
+    transition: ease-in-out 0.3s;
   }
