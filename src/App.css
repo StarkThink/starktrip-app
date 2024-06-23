@@ -17,18 +17,23 @@ code {
     font-size: 4rem;
     padding: 1rem 10rem;
     border: none;
-    background-color: #dd6767;
+    background-color: #DE7127;
     color: #fff;
     outline: none;
     cursor: pointer;
     border-radius: 5px;
     image-rendering: pixelated; /* Ensures the font stays pixelated */
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25); /* Adds a shadow */
-}
+    font-weight: bold;
+  }
   
-.pixel-art-button:hover {
-    background-color: #555;
+  .pixel-art-button:hover {
+    background-color: #12217A;
     transition: ease-in-out 0.3s;
+    -webkit-transition: ease-in-out 0.3s;
+    -moz-transition: ease-in-out 0.3s;
+    -ms-transition: ease-in-out 0.3s;
+    -o-transition: ease-in-out 0.3s;
 }
   
 .image-container {
@@ -167,7 +172,7 @@ code {
     width: 100%;
     text-align: center;
     font-size: 2rem;
-    color: rgb(216, 249, 117);
+    color: #fff;
     background: rgba(0, 0, 0, 0.5); 
     padding: 10px 0;
 }
