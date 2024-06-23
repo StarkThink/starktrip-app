@@ -168,6 +168,9 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
           Your goal is to collect all missing characters and bring them to their corresponding planet. Make sure
           not to run out of gas!
         </p>
+        <p>
+          To play just click on the board to move your spaceship. The spaceship will move to the clicked cell.
+        </p>
       </Modal>
       <ToastContainer 
           position="top-center"
