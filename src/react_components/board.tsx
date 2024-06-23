@@ -128,6 +128,7 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
             setPlayerPosition([moveEvents.move.pos_x, moveEvents.move.pos_y]);
             setRemainingGas(moveEvents.move.remaining_gas);
             if (moveEvents.gameOver) {
+              console.log("Game Over");
               setGameActive(false);
               onValueChange(false, false);
               break;
@@ -136,7 +137,10 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
             if (moveEvents.game_win.round > 0) {
               setGameActive(false);
               onValueChange(false, true);
+              console.log("gameWin", moveEvents.game_win.round);
               break;
+              //setGameActive(false);
+              //break;
             }
 
             let characters = getCharactersInside(game_id, moveEvents.move.len_characters_inside, CharactersInside);

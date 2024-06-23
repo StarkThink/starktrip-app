@@ -13,6 +13,8 @@ import { getSpaceship } from '../dojo/utils/getSpaceship';
 import { GAME_ID } from '../constants/localStorage';
 import gifImage from '../assets/countdown.gif';
 import './components.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface GameProps {
   account: BurnerAccount;
@@ -54,9 +56,29 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
     if (gameWin) {
       // Assuming create_round is an async function or a function that returns a promise
       await create_round(account.account, gameId);
+      toast.success('You won the game! 🚀', {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       await sleep(2000);
       setShowRound(true);
     } else {
+      toast.error('Game Over :(', {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       setGameEnded(true);
     }
   };
@@ -125,6 +147,17 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
           not to run out of gas!
         </p>
       </Modal>
+      <ToastContainer 
+          position="top-center"
+          limit={1}
+          autoClose={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          theme="light"
+        />
     </div>
   );
 };
