@@ -27,7 +27,6 @@ export const getLeaderBoard = (
     if (player.player_name === '') {
       continue;
     }
-    console.log("player", player.player_name, player.score)
     const player_object: Player = { player_name: decodeString(player.player_name), score: player.score };
     players.push(player_object);
   }

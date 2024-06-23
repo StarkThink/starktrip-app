@@ -31,7 +31,6 @@ export function createSystemCalls(
             if (tx.isSuccess()) {
               const events = tx.events;
               let events_found = getEvents(tx);
-              console.log("events", events_found);
               // This will update the contract models in the UI with the values that were set in the contract
               setComponentsFromEvents(contractComponents, events_found);
               // get game_id from CREATE_GAME_EVENT keys
@@ -64,7 +63,6 @@ export function createSystemCalls(
             if (tx.isSuccess()) {
                 const events = tx.events;
                 let events_found = getEvents(tx);
-                console.log("events", events_found);
                 setComponentsFromEvents(contractComponents, events_found);
                 return getMoveEvents(events);
             }
@@ -89,7 +87,6 @@ export function createSystemCalls(
           if (tx.isSuccess()) {
               const events = tx.events;
               let events_found = getEvents(tx);
-              console.log("events", events_found);
               setComponentsFromEvents(contractComponents, events_found);
               return getCreateRoundEvents(events);
           }
@@ -114,7 +111,6 @@ export function createSystemCalls(
         if (tx.isSuccess()) {
             const events = tx.events;
             let events_found = getEvents(tx);
-            console.log("events", events_found);
             setComponentsFromEvents(contractComponents, events_found);
             return getMoveEvents(events);
         }

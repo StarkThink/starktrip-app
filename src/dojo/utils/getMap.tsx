@@ -3,6 +3,11 @@ import { Entity, OverridableComponent } from "@dojoengine/recs/src/types";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { decodeString } from "./decodeString";
 
+interface MapInterface {
+    max_movements: number;
+    matrix: string[][];
+}
+
 export const getMap = (
   gameId: number,
   Tile: OverridableComponent,
@@ -27,6 +32,9 @@ export const getMap = (
             result[i][j] = decodeString(tile.value);
         }
     }
-    return result;
+    const out: MapInterface = {
+        max_movements: board.max_movements,
+        matrix: result,
+    };
+    return out;
 };
-

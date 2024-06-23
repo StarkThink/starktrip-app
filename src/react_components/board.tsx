@@ -98,7 +98,6 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
 
   useEffect(() => {
     if (path.length > 0) {
-      setRemainingGas(remainingGas - 1);
       const movePlayer = async () => {
         for (let i = 0; i < path.length; i++) {
             if (!gameActive) break;
@@ -126,7 +125,6 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
                 game_win: {round: 0, score: 0}
               };
 
-            console.log("moveEvents", moveEvents);
             setPlayerPosition([moveEvents.move.pos_x, moveEvents.move.pos_y]);
             setRemainingGas(moveEvents.move.remaining_gas);
             if (moveEvents.gameOver) {

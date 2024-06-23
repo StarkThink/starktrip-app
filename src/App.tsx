@@ -30,12 +30,10 @@ const App: React.FC = () => {
     });
 
     const executeCreateGame = (username: string) => {
-        console.log("Creating game...");
         createGame(account.account, username).then((newGameId) => {
           if (newGameId) {
             setGameId(newGameId);
             localStorage.setItem(GAME_ID, newGameId.toString());
-            console.log(`game ${newGameId} created`);
           } else {
             setError(true);
           }

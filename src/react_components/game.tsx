@@ -32,8 +32,10 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
 
   // get current component values
   const game = getGame(gameId, Game) ?? { player_name: 'Unknown Player', round: 1, score: 0 };
-  const matrix = getMap(gameId, Tile, Board);
+  const map = getMap(gameId, Tile, Board);
   const spaceship = getSpaceship(gameId, Spaceship) ?? { pos_x: 0, pos_y: 0 };
+
+  const matrix = map.matrix;
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
@@ -108,7 +110,7 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
                   player_y={spaceship.pos_y}
                   account={account}
                   game_id={gameId}
-                  initialGas={spaceship.remaining_gas}
+                  initialGas={map.max_movements}
                   onValueChange={handleBoardValueChange}
                 />
               </div>
