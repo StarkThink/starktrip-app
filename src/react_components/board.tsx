@@ -141,6 +141,9 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
               break;
               //setGameActive(false);
               //break;
+              setGameActive(false);
+              onValueChange(false, true);
+              break;
             }
 
             let characters = getCharactersInside(game_id, moveEvents.move.len_characters_inside, CharactersInside);

@@ -40,7 +40,6 @@ code {
     justify-content: center;
     align-items: center;
     background: url('./background.png') repeat center center;
-    filter: brightness(80%);
 }
   
 .background-image {

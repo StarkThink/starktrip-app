@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDojo } from "../dojo/useDojo";
 import { Entity } from "@dojoengine/recs";
 import BoardComponent from './board';
@@ -15,6 +15,8 @@ import gifImage from '../assets/countdown.gif';
 import './components.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import sound from "../assets/sound.mp3"
+import './components.css';
 
 interface GameProps {
   account: BurnerAccount;
@@ -41,6 +43,8 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
+  const [music, setMusic] = useState(true);
+  
   const [showRound, setShowRound] = useState(true); // initially show round animation
 
   const handleModalToggle = () => {
@@ -49,6 +53,7 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
 
   const handleEndGame = async () => {
     await end_game(account.account, gameId);
+    setMusic(false);
     setGameEnded(true);
   };
 
@@ -80,8 +85,22 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
         theme: "light",
       });
       setGameEnded(true);
+    }}
+
+  useEffect(() => {
+    const audio = new Audio(sound);
+    if (music) {
+      audio.play();
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
     }
-  };
+  
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [music]);
 
   useEffect(() => {
     if (showRound) {
@@ -117,6 +136,9 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
                   <p>Score: {game.score}</p>
                   <p className="how-to-play" onClick={handleModalToggle}>
                     How to play?
+                  </p>
+                  <p className='music' onClick={() => setMusic(prev => !prev)}>
+                      {music ? '🔉' : '🔇'}
                   </p>
                 </div>
                 <div className="buttons-container">
@@ -159,7 +181,7 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
           theme="light"
         />
     </div>
-  );
+  );  
 };
 
 export default Game;
