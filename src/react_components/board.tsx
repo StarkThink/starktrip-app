@@ -127,6 +127,8 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
               };
 
             console.log("moveEvents", moveEvents);
+            setPlayerPosition([moveEvents.move.pos_x, moveEvents.move.pos_y]);
+            setRemainingGas(moveEvents.move.remaining_gas);
             if (moveEvents.gameOver) {
               setGameActive(false);
               onValueChange(false, false);
@@ -139,8 +141,6 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
               break;
             }
 
-            setPlayerPosition([moveEvents.move.pos_x, moveEvents.move.pos_y]);
-            setRemainingGas(moveEvents.move.remaining_gas);
             let characters = getCharactersInside(game_id, moveEvents.move.len_characters_inside, CharactersInside);
             setCollectedCharacters(characters);
 

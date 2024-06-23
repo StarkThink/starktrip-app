@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import './components.css';
 import App from '../App';
+import { useDojo } from "../dojo/useDojo";
+import { getLeaderBoard } from '../dojo/utils/getLeaderBoard';
 
 const Leaderboard = () => {
   const [playAgain, setPlayAgain] = useState(false);
+    const {
+      setup: {
+          systemCalls: { },
+          clientComponents: { LeaderBoard, LeaderBoardPlayers },
+      },
+  } = useDojo();
+
+  const leaderboard = getLeaderBoard(LeaderBoard, LeaderBoardPlayers).slice(0, 20) ?? { len_player: 0 };
 
   const handlePlayAgain = () => {
     setPlayAgain(true);
@@ -15,11 +25,9 @@ const Leaderboard = () => {
           (<div className='leaderboard-wrapper'>
             <h1>Leaderboard</h1>
           <div className="leaderboard-scores">
-            <p>1. test - 100</p>
-            <p>2. test2 - 90</p>
-            <p>3. test3 - 80</p>
-            <p>4. test4 - 70</p>
-            <p>5. test5 - 60</p>
+            {leaderboard.map(([playerName, score], index) => (
+              <p key={index}>{index + 1}. {playerName} - {score}</p>
+            ))}
           </div>
           <div className='button-play-again-content'>
             <button className="button-play-again" onClick={handlePlayAgain}>Play Again</button>

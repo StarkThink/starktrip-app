@@ -20,10 +20,12 @@ interface GameProps {
   gameId: number;
 }
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
   const {
       setup: {
-          systemCalls: { move },
+          systemCalls: { create_round, end_game },
           clientComponents: { Board, Tile, Game, Spaceship },
       },
   } = useDojo();
@@ -32,7 +34,6 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
   const game = getGame(gameId, Game) ?? { player_name: 'Unknown Player', round: 1, score: 0 };
   const matrix = getMap(gameId, Tile, Board);
   const spaceship = getSpaceship(gameId, Spaceship) ?? { pos_x: 0, pos_y: 0 };
-  console.log('spaceship', spaceship);
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
@@ -42,12 +43,20 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
     setShowModal(!showModal);
   };
 
-  const handleEndGame = () => {
+  const handleEndGame = async () => {
+    await end_game(account.account, gameId);
     setGameEnded(true);
   };
 
-  const handleBoardValueChange = (gameActive: boolean, gameWin: boolean) => {
-    setShowRound(true);
+  const handleBoardValueChange = async (gameActive: boolean, gameWin: boolean) => {
+    if (gameWin) {
+      // Assuming create_round is an async function or a function that returns a promise
+      await create_round(account.account, gameId);
+      await sleep(2000);
+      setShowRound(true);
+    } else {
+      setGameEnded(true);
+    }
   };
 
   useEffect(() => {
@@ -69,7 +78,7 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
           {showRound ? (
             <div className="image-container">
               <div className="round-title">
-                Round 1
+                Round {game.round}
               </div>
               <div className="gif-container">
                 <img src={gifImage} alt="Loading animation" />
@@ -87,9 +96,6 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
                   </p>
                 </div>
                 <div className="buttons-container">
-                  <div className="button-container">
-                    <button className="next-round-button" disabled={true}>Next Round</button>
-                  </div>
                   <div className="button-container">
                     <button className="end-game-button" onClick={handleEndGame}>End Game</button>
                   </div>

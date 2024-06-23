@@ -9,6 +9,7 @@ import {
 } from "@dojoengine/utils";
 import { ContractComponents } from "./generated/contractComponents";
 import type { IWorld } from "./generated/generated";
+import { getCreateRoundEvents } from "../utils/getCreateRoundEvents";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -47,19 +48,6 @@ export function createSystemCalls(
         };
 
     const move = async (account: AccountInterface, game_id: number, pos_x: number, pos_y: number) => {
-        //const entityId = getEntityIdFromKeys([
-        //    BigInt(account.address),
-        //]) as Entity;
-        /*Position.addOverride(positionId, {
-            entity: entityId,
-            value: {
-                player: BigInt(entityId),
-                vec: updatePositionWithDirection(
-                    direction,
-                    getComponentValue(Position, entityId) as any
-                ).vec,
-            },
-        });*/
 
         try {
             const { transaction_hash } = await client.actions.move({
@@ -86,8 +74,60 @@ export function createSystemCalls(
         }
     };
 
+    const create_round = async (account: AccountInterface, game_id: number) => {
+
+      try {
+          const { transaction_hash } = await client.actions.create_round({
+            account,
+            game_id
+          });
+    
+          const tx = await account.waitForTransaction(transaction_hash, {
+            retryInterval: 100,
+          });
+
+          if (tx.isSuccess()) {
+              const events = tx.events;
+              let events_found = getEvents(tx);
+              console.log("events", events_found);
+              setComponentsFromEvents(contractComponents, events_found);
+              return getCreateRoundEvents(events);
+          }
+          return undefined;
+      } catch (e) {
+          console.log(e);
+      }
+  };
+
+  const end_game = async (account: AccountInterface, game_id: number) => {
+
+    try {
+        const { transaction_hash } = await client.actions.end_game({
+          account,
+          game_id,
+        });
+  
+        const tx = await account.waitForTransaction(transaction_hash, {
+          retryInterval: 100,
+        });
+
+        if (tx.isSuccess()) {
+            const events = tx.events;
+            let events_found = getEvents(tx);
+            console.log("events", events_found);
+            setComponentsFromEvents(contractComponents, events_found);
+            return getMoveEvents(events);
+        }
+        return undefined;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
     return {
         createGame,
         move,
+        create_round,
+        end_game
     };
 }
