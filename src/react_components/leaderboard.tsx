@@ -13,7 +13,7 @@ const Leaderboard = () => {
       },
   } = useDojo();
 
-  const leaderboard = getLeaderBoard(LeaderBoard, LeaderBoardPlayers).slice(0, 20) ?? { len_player: 0 };
+  const leaderboard = getLeaderBoard(LeaderBoard, LeaderBoardPlayers).slice(0, 10) ?? { len_player: 0 };
 
   const handlePlayAgain = () => {
     setPlayAgain(true);
