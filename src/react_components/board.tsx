@@ -25,6 +25,7 @@ interface BoardProps {
   account: BurnerAccount;
   game_id: number;
   initialGas: number;
+  onValueChange: (gameActive: boolean, gameWin: boolean) => void;
 }
 
 const getCellClass = (cell: string): string => {
@@ -81,7 +82,7 @@ const findInitialPlayerPosition = (matrix: string[][]): [number, number] | null 
   return null;
 };
 
-const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game_id, initialGas }) => {
+const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game_id, initialGas, onValueChange }) => {
   const {
       setup: {
           systemCalls: { move },
@@ -127,15 +128,15 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
 
             console.log("moveEvents", moveEvents);
             if (moveEvents.gameOver) {
-              console.log("Game Over");
               setGameActive(false);
+              onValueChange(false, false);
               break;
             }
 
             if (moveEvents.game_win.round > 0) {
-              console.log("gameWin", moveEvents.game_win.round);
-              //setGameActive(false);
-              //break;
+              setGameActive(false);
+              onValueChange(false, true);
+              break;
             }
 
             setPlayerPosition([moveEvents.move.pos_x, moveEvents.move.pos_y]);
@@ -164,78 +165,78 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
   };
 
   return (
-    <div className="board-container">
-      <div className="board">
-        {matrix.map((row, rowIndex) => (
-          <div key={rowIndex} className="row">
-            {row.map((cell, cellIndex) => (
-              <div
-                key={cellIndex}
-                className={`cell ${getCellClass(cell)}`}
-                onClick={() => handleCellClick(rowIndex, cellIndex)}
-              >
-                {playerPosition && playerPosition[0] === rowIndex && playerPosition[1] === cellIndex ? (
-                  <img src={spaceshipGif} alt="player" className={`gif-image spaceship-${direction}`} />
-                ) : (
-                  <>
-                    {cell === 'alien' && <img src={alienCharacter} alt="gif" className="gif-image" />}
-                    {(cell === 'empty' || cell === 'player')&& <img src={pathGif} alt="gif" className="gif-image" />}
-                    {cell === 'ghost' && <img src={ghostCharacter} alt="gif" className="gif-image" />}
-                    {cell === 'dino' && <img src={dinoCharacter} alt="gif" className="gif-image" />}
-                    {cell === 'alien2' && <img src={alien2Character} alt="gif" className="gif-image" />}
-                    {cell === 'lazybear' && <img src={lazybearCharacter} alt="gif" className="gif-image" />}
-                    {cell === 'robot' && <img src={robotCharacter} alt="gif" className="gif-image" />}
+      <div className="board-container">
+        <div className="board">
+          {matrix.map((row, rowIndex) => (
+            <div key={rowIndex} className="row">
+              {row.map((cell, cellIndex) => (
+                <div
+                  key={cellIndex}
+                  className={`cell ${getCellClass(cell)}`}
+                  onClick={() => handleCellClick(rowIndex, cellIndex)}
+                >
+                  {playerPosition && playerPosition[0] === rowIndex && playerPosition[1] === cellIndex ? (
+                    <img src={spaceshipGif} alt="player" className={`gif-image spaceship-${direction}`} />
+                  ) : (
+                    <>
+                      {cell === 'alien' && <img src={alienCharacter} alt="gif" className="gif-image" />}
+                      {(cell === 'empty' || cell === 'player')&& <img src={pathGif} alt="gif" className="gif-image" />}
+                      {cell === 'ghost' && <img src={ghostCharacter} alt="gif" className="gif-image" />}
+                      {cell === 'dino' && <img src={dinoCharacter} alt="gif" className="gif-image" />}
+                      {cell === 'alien2' && <img src={alien2Character} alt="gif" className="gif-image" />}
+                      {cell === 'lazybear' && <img src={lazybearCharacter} alt="gif" className="gif-image" />}
+                      {cell === 'robot' && <img src={robotCharacter} alt="gif" className="gif-image" />}
 
-                    {cell === 'alien_p' && <img src={alienPlanet} alt="gif" className="gif-image" />}
-                    {cell === 'ghost_p' && <img src={ghostPlanet} alt="gif" className="gif-image" />}
-                    {cell === 'dino_p' && <img src={dinoPlanet} alt="gif" className="gif-image" />}
-                    {cell === 'alien2_p' && <img src={alien2Planet} alt="gif" className="gif-image" />}
-                    {cell === 'lazybear_p' && <img src={lazybearPlanet} alt="gif" className="gif-image" />}
-                    {cell === 'robot_p' && <img src={robotPlanet} alt="gif" className="gif-image" />}
-                  </>
-                )}
-              </div>
-            ))}
+                      {cell === 'alien_p' && <img src={alienPlanet} alt="gif" className="gif-image" />}
+                      {cell === 'ghost_p' && <img src={ghostPlanet} alt="gif" className="gif-image" />}
+                      {cell === 'dino_p' && <img src={dinoPlanet} alt="gif" className="gif-image" />}
+                      {cell === 'alien2_p' && <img src={alien2Planet} alt="gif" className="gif-image" />}
+                      {cell === 'lazybear_p' && <img src={lazybearPlanet} alt="gif" className="gif-image" />}
+                      {cell === 'robot_p' && <img src={robotPlanet} alt="gif" className="gif-image" />}
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="collected-characters-container">
+          <div>
+            <p>Gas ⛽ {remainingGas} / {initialGas}</p>
           </div>
-        ))}
-      </div>
-      <div className="collected-characters-container">
-        <div>
-          <p>Gas ⛽ {remainingGas} / {initialGas}</p>
-        </div>
-        <div>
-            Inside 🚀:
-        </div>
-        <div className="collected-characters">
-            {collectedCharacters.map((character, index) => {
-            let characterSrc;
-            switch (character) {
-                case 'alien':
-                characterSrc = alienCharacter;
-                break;
-                case 'ghost':
-                characterSrc = ghostCharacter;
-                break;
-                case 'dino':
-                characterSrc = dinoCharacter;
-                break;
-                case 'alien2':
-                characterSrc = alien2Character;
-                break;
-                case 'robot':
-                characterSrc = robotCharacter;
-                break;
-                case 'lazybear':
-                characterSrc = lazybearCharacter;
-                break;
-                default:
-                characterSrc = null;
-            }
-            return characterSrc ? <img key={index} src={characterSrc} alt={character} className="collected-gif" /> : null;
-            })}
+          <div>
+              Inside 🚀:
+          </div>
+          <div className="collected-characters">
+              {collectedCharacters.map((character, index) => {
+              let characterSrc;
+              switch (character) {
+                  case 'alien':
+                  characterSrc = alienCharacter;
+                  break;
+                  case 'ghost':
+                  characterSrc = ghostCharacter;
+                  break;
+                  case 'dino':
+                  characterSrc = dinoCharacter;
+                  break;
+                  case 'alien2':
+                  characterSrc = alien2Character;
+                  break;
+                  case 'robot':
+                  characterSrc = robotCharacter;
+                  break;
+                  case 'lazybear':
+                  characterSrc = lazybearCharacter;
+                  break;
+                  default:
+                  characterSrc = null;
+              }
+              return characterSrc ? <img key={index} src={characterSrc} alt={character} className="collected-gif" /> : null;
+              })}
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 

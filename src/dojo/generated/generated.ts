@@ -16,6 +16,16 @@ interface CreateGameProps {
     account: AccountInterface;
     username: string;
 }
+
+interface CreateRoundProps {
+    account: AccountInterface;
+    game_id: number;
+}
+
+interface EndGameProps {
+    account: AccountInterface;
+    game_id: number;
+}
 const game_contract = "game_system";
 
 export async function setupWorld(provider: DojoProvider) {
@@ -48,7 +58,35 @@ export async function setupWorld(provider: DojoProvider) {
                 throw error;
             }
         };
-        return { createGame, move };
+
+        const create_round = async ({ account, game_id}: CreateRoundProps) => {
+            try {
+                return await provider.execute(
+                    account,
+                    game_contract,
+                    "create_round",
+                    [game_id]
+                );
+            } catch (error) {
+                console.error("Error executing create_round:", error);
+                throw error;
+            }
+        };
+
+        const end_game = async ({ account, game_id}: EndGameProps) => {
+            try {
+                return await provider.execute(
+                    account,
+                    game_contract,
+                    "end_game",
+                    [game_id]
+                );
+            } catch (error) {
+                console.error("Error executing end_game:", error);
+                throw error;
+            }
+        };
+        return { createGame, move, create_round, end_game};
     }
     return {
         actions: actions(),

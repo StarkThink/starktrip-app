@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDojo } from "../dojo/useDojo";
 import { Entity } from "@dojoengine/recs";
-import { useComponentValue } from "@dojoengine/react";
 import BoardComponent from './board';
 import Leaderboard from './leaderboard';
 import Modal from './modal';
@@ -12,6 +11,8 @@ import { decodeString } from '../dojo/utils/decodeString';
 import { getMap } from '../dojo/utils/getMap';
 import { getSpaceship } from '../dojo/utils/getSpaceship';
 import { GAME_ID } from '../constants/localStorage';
+import gifImage from '../assets/countdown.gif';
+import './components.css';
 
 interface GameProps {
   account: BurnerAccount;
@@ -35,7 +36,8 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
-  
+  const [showRound, setShowRound] = useState(true); // initially show round animation
+
   const handleModalToggle = () => {
     setShowModal(!showModal);
   };
@@ -44,40 +46,68 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
     setGameEnded(true);
   };
 
+  const handleBoardValueChange = (gameActive: boolean, gameWin: boolean) => {
+    setShowRound(true);
+  };
+
+  useEffect(() => {
+    if (showRound) {
+      const timer = setTimeout(() => {
+        setShowRound(false);
+      }, 2000); // 2 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [showRound]);
+
   return (
-    <div className="game-background">
+    <div className="image-container">
       {gameEnded ? (
         <Leaderboard />
       ) : (
         <div className="game-content">
-          <div className="board-header">
-            <div>
-              <p>Player: {decodeString(game.player_name)}</p>
-              <p>Round: {game.round}</p>
-              <p>Score: {game.score}</p>
-              <p className="how-to-play" onClick={handleModalToggle}>
-                How to play?
-              </p>
-            </div>
-            <div className="buttons-container">
-              <div className="button-container">
-                <button className="next-round-button" disabled={true}>Next Round</button>
+          {showRound ? (
+            <div className="image-container">
+              <div className="round-title">
+                Round 1
               </div>
-              <div className="button-container">
-                <button className="end-game-button" onClick={handleEndGame}>End Game</button>
+              <div className="gif-container">
+                <img src={gifImage} alt="Loading animation" />
               </div>
             </div>
-          </div>
-          <div className="board-content">
-            <BoardComponent
-              matrix={matrix}
-              player_x={spaceship.pos_x}
-              player_y={spaceship.pos_y}
-              account={account}
-              game_id={gameId}
-              initialGas={spaceship.remaining_gas}
-            />
-          </div>
+          ) : (
+            <>
+              <div className="board-header">
+                <div>
+                  <p>Player: {decodeString(game.player_name)}</p>
+                  <p>Round: {game.round}</p>
+                  <p>Score: {game.score}</p>
+                  <p className="how-to-play" onClick={handleModalToggle}>
+                    How to play?
+                  </p>
+                </div>
+                <div className="buttons-container">
+                  <div className="button-container">
+                    <button className="next-round-button" disabled={true}>Next Round</button>
+                  </div>
+                  <div className="button-container">
+                    <button className="end-game-button" onClick={handleEndGame}>End Game</button>
+                  </div>
+                </div>
+              </div>
+              <div className="board-content">
+                <BoardComponent
+                  matrix={matrix}
+                  player_x={spaceship.pos_x}
+                  player_y={spaceship.pos_y}
+                  account={account}
+                  game_id={gameId}
+                  initialGas={spaceship.remaining_gas}
+                  onValueChange={handleBoardValueChange}
+                />
+              </div>
+            </>
+          )}
         </div>
       )}
       <Modal show={showModal} handleClose={handleModalToggle}>

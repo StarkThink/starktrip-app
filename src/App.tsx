@@ -4,6 +4,7 @@ import "./App.css";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojo } from "./dojo/useDojo";
 import Round  from "./react_components/Round";
+import Game  from "./react_components/game";
 import gifImage from './assets/starktrip.gif';
 import { GAME_ID } from "./constants/localStorage";
 
@@ -67,7 +68,7 @@ const App: React.FC = () => {
         const entityId = getEntityIdFromKeys([
             BigInt(account?.account.address),
         ]) as Entity;
-        return <Round account={account} gameId={gameId} entityId={entityId} />;
+        return <Game account={account} gameId={gameId} entityId={entityId} />;
     }
 
     return (
