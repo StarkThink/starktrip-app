@@ -4,6 +4,10 @@ import alienCharacter from '../assets/characters/alien.gif';
 import ghostCharacter from '../assets/characters/ghost.gif';
 import alien2Character from '../assets/characters/alien2.png';
 import dinoCharacter from '../assets/characters/dinosaur.gif';
+import robotCharacter from '../assets/characters/robot.gif';
+import robotPlanet from '../assets/planets/robot.png';
+import lazybearCharacter from '../assets/characters/lazybear.gif';
+import lazybearPlanet from '../assets/planets/earth.png';
 import alienPlanet from '../assets/planets/alien.png';
 import ghostPlanet from '../assets/planets/ghost.png';
 import alien2Planet from '../assets/planets/alien2.png';
@@ -12,6 +16,7 @@ import pathGif from '../assets/path.gif';
 import spaceshipGif from '../assets/spaceship.gif';
 import { useDojo } from "../dojo/useDojo";
 import { BurnerAccount } from '@dojoengine/create-burner';
+import { getCharactersInside } from '../dojo/utils/getCharactersInside';
 
 interface BoardProps {
   matrix: string[][];
@@ -19,6 +24,7 @@ interface BoardProps {
   player_y: number;
   account: BurnerAccount;
   game_id: number;
+  initialGas: number;
 }
 
 const getCellClass = (cell: string): string => {
@@ -75,26 +81,26 @@ const findInitialPlayerPosition = (matrix: string[][]): [number, number] | null 
   return null;
 };
 
-const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game_id }) => {
+const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game_id, initialGas }) => {
   const {
       setup: {
           systemCalls: { move },
-          clientComponents: { },
+          clientComponents: { CharactersInside },
       },
   } = useDojo();
   const [playerPosition, setPlayerPosition] = useState<[number, number] | null>([player_x, player_y]);
   const [direction, setDirection] = useState<string>('up');
   const [path, setPath] = useState<[number, number][]>([]);
   const [collectedCharacters, setCollectedCharacters] = useState<string[]>([]);
-  const [remainingGas, setRemainingGas] = useState(5);
-  const initialGas = useRef(remainingGas);
+  const [remainingGas, setRemainingGas] = useState(initialGas);
+  const [gameActive, setGameActive] = useState(true);
 
   useEffect(() => {
     if (path.length > 0) {
       setRemainingGas(remainingGas - 1);
       const movePlayer = async () => {
         for (let i = 0; i < path.length; i++) {
-            if (remainingGas === 0) break;
+            if (!gameActive) break;
             const [x, y] = path[i];
             let index = i - 1;
             if (index < 0) index = 0;
@@ -105,13 +111,39 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
             else if (y > prevY) setDirection('right');
 
             const cellContent = matrix[x][y];
-            if (cellContent !== 'empty' && cellContent !== 'empty' && cellContent !== 'player' && !cellContent.includes('_p')) {
+            if (cellContent !== 'blank' && cellContent !== 'empty' && cellContent !== 'player' && !cellContent.includes('_p')) {
                 setCollectedCharacters(prev => [...prev, cellContent]);
                 matrix[x][y] = 'empty'; // Remove character from the matrix
             }
 
-          let moveEvent = await move(account.account, game_id, x, y) ?? { pos_x: 0, pos_y: 0 };
-          setPlayerPosition([moveEvent.pos_x, moveEvent.pos_y]);
+          if (i > 0) {
+            let moveEvents = await move(
+              account.account, game_id, x, y
+            ) ?? { 
+                move: {pos_x: 0, pos_y: 0, remaining_gas: 0, len_characters_inside: 0}, 
+                gameOver: false,
+                game_win: {round: 0, score: 0}
+              };
+
+            console.log("moveEvents", moveEvents);
+            if (moveEvents.gameOver) {
+              console.log("Game Over");
+              setGameActive(false);
+              break;
+            }
+
+            if (moveEvents.game_win.round > 0) {
+              console.log("gameWin", moveEvents.game_win.round);
+              //setGameActive(false);
+              //break;
+            }
+
+            setPlayerPosition([moveEvents.move.pos_x, moveEvents.move.pos_y]);
+            setRemainingGas(moveEvents.move.remaining_gas);
+            let characters = getCharactersInside(game_id, moveEvents.move.len_characters_inside, CharactersInside);
+            setCollectedCharacters(characters);
+
+          }
           await new Promise(resolve => setTimeout(resolve, 10)); // Move delay
         }
       };
@@ -120,8 +152,8 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
   }, [path]);
 
   const handleCellClick = (rowIndex: number, cellIndex: number) => {
-    if (remainingGas <= 0) {
-      return
+    if (!gameActive) {
+       return
     }
     if (playerPosition) {
       const newPath = findPath(matrix, playerPosition, [rowIndex, cellIndex]);
@@ -151,11 +183,15 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
                     {cell === 'ghost' && <img src={ghostCharacter} alt="gif" className="gif-image" />}
                     {cell === 'dino' && <img src={dinoCharacter} alt="gif" className="gif-image" />}
                     {cell === 'alien2' && <img src={alien2Character} alt="gif" className="gif-image" />}
+                    {cell === 'lazybear' && <img src={lazybearCharacter} alt="gif" className="gif-image" />}
+                    {cell === 'robot' && <img src={robotCharacter} alt="gif" className="gif-image" />}
 
                     {cell === 'alien_p' && <img src={alienPlanet} alt="gif" className="gif-image" />}
                     {cell === 'ghost_p' && <img src={ghostPlanet} alt="gif" className="gif-image" />}
                     {cell === 'dino_p' && <img src={dinoPlanet} alt="gif" className="gif-image" />}
                     {cell === 'alien2_p' && <img src={alien2Planet} alt="gif" className="gif-image" />}
+                    {cell === 'lazybear_p' && <img src={lazybearPlanet} alt="gif" className="gif-image" />}
+                    {cell === 'robot_p' && <img src={robotPlanet} alt="gif" className="gif-image" />}
                   </>
                 )}
               </div>
@@ -165,10 +201,10 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
       </div>
       <div className="collected-characters-container">
         <div>
-          <p>Gas ⛽ {remainingGas} / {initialGas.current}</p>
+          <p>Gas ⛽ {remainingGas} / {initialGas}</p>
         </div>
         <div>
-            Collected Characters
+            Inside 🚀:
         </div>
         <div className="collected-characters">
             {collectedCharacters.map((character, index) => {
@@ -185,6 +221,12 @@ const Board: React.FC<BoardProps> = ({ matrix, player_x, player_y, account, game
                 break;
                 case 'alien2':
                 characterSrc = alien2Character;
+                break;
+                case 'robot':
+                characterSrc = robotCharacter;
+                break;
+                case 'lazybear':
+                characterSrc = lazybearCharacter;
                 break;
                 default:
                 characterSrc = null;

@@ -75,6 +75,7 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
               player_y={spaceship.pos_y}
               account={account}
               game_id={gameId}
+              initialGas={spaceship.remaining_gas}
             />
           </div>
         </div>

@@ -677,8 +677,8 @@
     {
       "kind": "DojoContract",
       "address": "0x7d64230848cc3da3acd52e56057bda02261dbc7114f7da56aa1368b57cb4888",
-      "class_hash": "0x5fec7ca2f5f4bf5f308b9c4c6b349e780b1ace61bff2f285c1716478d8dcb7c",
-      "original_class_hash": "0x5fec7ca2f5f4bf5f308b9c4c6b349e780b1ace61bff2f285c1716478d8dcb7c",
+      "class_hash": "0x5c35c0589da1da4b19b58d53f269627ed5c0af5bc6a507c8b9521d7a56f9c73",
+      "original_class_hash": "0x5c35c0589da1da4b19b58d53f269627ed5c0af5bc6a507c8b9521d7a56f9c73",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -775,6 +775,30 @@
                 {
                   "name": "pos_y",
                   "type": "core::integer::u8"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "create_round",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "end_game",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
                 }
               ],
               "outputs": [],
@@ -1593,27 +1617,12 @@
         },
         {
           "name": "round",
-          "type": "u32",
-          "key": false
-        },
-        {
-          "name": "player_name",
-          "type": "felt252",
-          "key": false
-        },
-        {
-          "name": "owner",
-          "type": "ContractAddress",
-          "key": false
-        },
-        {
-          "name": "state",
-          "type": "bool",
+          "type": "u8",
           "key": false
         }
       ],
-      "class_hash": "0x1858c778a8e786dca7942ea429fdb02fa778319b6f96ec6d00a81402089c7d5",
-      "original_class_hash": "0x1858c778a8e786dca7942ea429fdb02fa778319b6f96ec6d00a81402089c7d5",
+      "class_hash": "0x18b5bf7aab2a990f0e98267279eea20cdff1e51328f260a2ebb8f098c80a219",
+      "original_class_hash": "0x18b5bf7aab2a990f0e98267279eea20cdff1e51328f260a2ebb8f098c80a219",
       "abi": [
         {
           "type": "impl",
@@ -1789,20 +1798,6 @@
           "interface_name": "starktrip::models::events::Igame_event"
         },
         {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
-        },
-        {
           "type": "struct",
           "name": "starktrip::models::events::GameEvent",
           "members": [
@@ -1816,19 +1811,7 @@
             },
             {
               "name": "round",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "player_name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "owner",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "state",
-              "type": "core::bool"
+              "type": "core::integer::u8"
             }
           ]
         },
@@ -2110,12 +2093,12 @@
         },
         {
           "name": "score",
-          "type": "u8",
+          "type": "u32",
           "key": false
         }
       ],
-      "class_hash": "0x5559bbe91044a5fe5e71a71099b444e96dd40f168947bcab14a090d39ff5252",
-      "original_class_hash": "0x5559bbe91044a5fe5e71a71099b444e96dd40f168947bcab14a090d39ff5252",
+      "class_hash": "0x30cc6c253b686032bfe2b881b4f35ece7776f28b1b393820fd33a943f7445b6",
+      "original_class_hash": "0x30cc6c253b686032bfe2b881b4f35ece7776f28b1b393820fd33a943f7445b6",
       "abi": [
         {
           "type": "impl",
@@ -2308,7 +2291,7 @@
             },
             {
               "name": "score",
-              "type": "core::integer::u8"
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -2361,10 +2344,20 @@
           "name": "remaining_gas",
           "type": "u8",
           "key": false
+        },
+        {
+          "name": "max_movements",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "len_characters_inside",
+          "type": "u8",
+          "key": false
         }
       ],
-      "class_hash": "0x77ccacdbfc50c17edd8d2bd6fe5adfb793be4d999e9e5155b2c78ee06367892",
-      "original_class_hash": "0x77ccacdbfc50c17edd8d2bd6fe5adfb793be4d999e9e5155b2c78ee06367892",
+      "class_hash": "0x6807cc54130028f2d28622175c45a345968173ec35c49914fa928675c78ff92",
+      "original_class_hash": "0x6807cc54130028f2d28622175c45a345968173ec35c49914fa928675c78ff92",
       "abi": [
         {
           "type": "impl",
@@ -2558,6 +2551,14 @@
             {
               "name": "remaining_gas",
               "type": "core::integer::u8"
+            },
+            {
+              "name": "max_movements",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "len_characters_inside",
+              "type": "core::integer::u8"
             }
           ]
         },
@@ -2608,17 +2609,22 @@
         },
         {
           "name": "score",
-          "type": "u8",
+          "type": "u32",
           "key": false
         },
         {
           "name": "round",
           "type": "u8",
           "key": false
+        },
+        {
+          "name": "active",
+          "type": "bool",
+          "key": false
         }
       ],
-      "class_hash": "0xd10ab107b99cb0f24cfac8f20c29de7e69d1cadc13ed7674cdc9786c18b7b4",
-      "original_class_hash": "0xd10ab107b99cb0f24cfac8f20c29de7e69d1cadc13ed7674cdc9786c18b7b4",
+      "class_hash": "0x1e8a060477efdd42cdb4141b84aa297adf9c6dadf4855b293fcfbc48bfa6d57",
+      "original_class_hash": "0x1e8a060477efdd42cdb4141b84aa297adf9c6dadf4855b293fcfbc48bfa6d57",
       "abi": [
         {
           "type": "impl",
@@ -2794,6 +2800,20 @@
           "interface_name": "starktrip::models::game::Igame"
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "starktrip::models::game::Game",
           "members": [
@@ -2811,11 +2831,15 @@
             },
             {
               "name": "score",
-              "type": "core::integer::u8"
+              "type": "core::integer::u32"
             },
             {
               "name": "round",
               "type": "core::integer::u8"
+            },
+            {
+              "name": "active",
+              "type": "core::bool"
             }
           ]
         },
@@ -2856,12 +2880,12 @@
         },
         {
           "name": "len_players",
-          "type": "u16",
+          "type": "u32",
           "key": false
         }
       ],
-      "class_hash": "0x4fe726e0fc3b6f14c1beab90317c04b167573a30804ed38b6770ce5e8bb37af",
-      "original_class_hash": "0x4fe726e0fc3b6f14c1beab90317c04b167573a30804ed38b6770ce5e8bb37af",
+      "class_hash": "0x6adbbaa81735ea2dbe58c881199b207652aa378dd9f7f1fbf1787a33b3bd701",
+      "original_class_hash": "0x6adbbaa81735ea2dbe58c881199b207652aa378dd9f7f1fbf1787a33b3bd701",
       "abi": [
         {
           "type": "impl",
@@ -3046,7 +3070,7 @@
             },
             {
               "name": "len_players",
-              "type": "core::integer::u16"
+              "type": "core::integer::u32"
             }
           ]
         },

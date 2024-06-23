@@ -2,7 +2,7 @@ import { AccountInterface } from "starknet";
 import { ClientComponents } from "./createClientComponents";
 import { getNumberValueFromEvents } from "../utils/getNumberValueFromEvent";
 import { CREATE_GAME_EVENT } from "../constants/dojoEventKeys";
-import { getMoveEvent } from "../utils/getMoveEvents";
+import { getMoveEvents } from "../utils/getMoveEvents";
 import {
     getEvents,
     setComponentsFromEvents,
@@ -78,7 +78,7 @@ export function createSystemCalls(
                 let events_found = getEvents(tx);
                 console.log("events", events_found);
                 setComponentsFromEvents(contractComponents, events_found);
-                return getMoveEvent(events);
+                return getMoveEvents(events);
             }
             return undefined;
         } catch (e) {
