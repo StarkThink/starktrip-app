@@ -29,6 +29,10 @@
     background: url('./background.png') repeat center center;
 }
 
+.music {
+    cursor: pointer;
+}
+
 .game-content {
 	/* border: 1px solid red; */
 	width: 1000px;

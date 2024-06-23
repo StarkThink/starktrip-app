@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDojo } from "../dojo/useDojo";
 import { Entity } from "@dojoengine/recs";
 import BoardComponent from './board';
@@ -12,6 +12,10 @@ import { getMap } from '../dojo/utils/getMap';
 import { getSpaceship } from '../dojo/utils/getSpaceship';
 import { GAME_ID } from '../constants/localStorage';
 import gifImage from '../assets/countdown.gif';
+import './components.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import sound from "../assets/sound.mp3"
 import './components.css';
 
 interface GameProps {
@@ -39,6 +43,8 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
 
   const [showModal, setShowModal] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
+  const [music, setMusic] = useState(true);
+  
   const [showRound, setShowRound] = useState(true); // initially show round animation
 
   const handleModalToggle = () => {
@@ -47,6 +53,7 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
 
   const handleEndGame = async () => {
     await end_game(account.account, gameId);
+    setMusic(false);
     setGameEnded(true);
   };
 
@@ -54,12 +61,46 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
     if (gameWin) {
       // Assuming create_round is an async function or a function that returns a promise
       await create_round(account.account, gameId);
+      toast.success('You won the game! 🚀', {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       await sleep(2000);
       setShowRound(true);
     } else {
+      toast.error('Game Over :(', {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       setGameEnded(true);
+    }}
+
+  useEffect(() => {
+    const audio = new Audio(sound);
+    if (music) {
+      audio.play();
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
     }
-  };
+  
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [music]);
 
   useEffect(() => {
     if (showRound) {
@@ -96,6 +137,9 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
                   <p className="how-to-play" onClick={handleModalToggle}>
                     How to play?
                   </p>
+                  <p className='music' onClick={() => setMusic(prev => !prev)}>
+                      {music ? '🔉' : '🔇'}
+                  </p>
                 </div>
                 <div className="buttons-container">
                   <div className="button-container">
@@ -125,8 +169,19 @@ const Game: React.FC<GameProps> = ({ account, entityId, gameId }) => {
           not to run out of gas!
         </p>
       </Modal>
+      <ToastContainer 
+          position="top-center"
+          limit={1}
+          autoClose={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          theme="light"
+        />
     </div>
-  );
+  );  
 };
 
 export default Game;

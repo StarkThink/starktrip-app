@@ -7,6 +7,8 @@ import Round  from "./react_components/Round";
 import Game  from "./react_components/game";
 import gifImage from './assets/starktrip.gif';
 import { GAME_ID } from "./constants/localStorage";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
     const {
@@ -24,11 +26,6 @@ const App: React.FC = () => {
 
     const [playerName, setPlayerName] = useState('');
 
-    const [clipboardStatus, setClipboardStatus] = useState({
-        message: "",
-        isError: false,
-    });
-
     const executeCreateGame = (username: string) => {
         createGame(account.account, username).then((newGameId) => {
           if (newGameId) {
@@ -42,7 +39,16 @@ const App: React.FC = () => {
 
     const handlePlayClick = () => {
         if (playerName === '') {
-            setClipboardStatus({ message: "Player name is required", isError: true });
+            toast.error('Player name is required', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
             return;
         }
         executeCreateGame(playerName);
@@ -51,16 +57,6 @@ const App: React.FC = () => {
         }
         setStartGame(true);
     };
-
-    useEffect(() => {
-        if (clipboardStatus.message) {
-            const timer = setTimeout(() => {
-                setClipboardStatus({ message: "", isError: false });
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [clipboardStatus.message]);
 
     if (startGame) {
         const entityId = getEntityIdFromKeys([
@@ -86,14 +82,19 @@ const App: React.FC = () => {
                             onChange={e => setPlayerName(e.target.value)} 
                         />
                     </div>
-                    <div className="error-container">
-                        {clipboardStatus.isError && (
-                            <div className="player-name-error">{clipboardStatus.message}</div>
-                        )}
-                    </div>
                 </div>
                 <div className="centered-button">
                     <button onClick={handlePlayClick} className="pixel-art-button">Start</button>
+                    <ToastContainer 
+                        limit={1}
+                        autoClose={false}
+                        newestOnTop={false}
+                        closeOnClick={false}
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        theme="light"
+                    />
                 </div>
             </div>
         </div>
